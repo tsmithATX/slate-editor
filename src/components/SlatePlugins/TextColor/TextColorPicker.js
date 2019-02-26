@@ -89,9 +89,6 @@ export default class TextColorPicker extends Component {
 	handleChange = color => {
 		const { editorRef } = this.props;
 		const colorString = reactColorToColorString(color.rgb);
-		console.log(colorString);
-		console.log(COLOR_MARK);
-		console.log(editorRef.current);
 		editorRef.current
 			.focus()
 			.removeMark(COLOR_MARK)

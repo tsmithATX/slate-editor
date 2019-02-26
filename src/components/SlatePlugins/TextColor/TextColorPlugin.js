@@ -10,7 +10,7 @@ const ColoredText = styled.span`
 export const TextColorPlugin = () => {
 	return {
 		renderMark: (props, editor, next) => {
-			console.log(props.mark);
+			console.log('props.mark', props.mark);
 			switch (props.mark.type) {
 				case 'colored':
 					return (
