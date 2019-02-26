@@ -22,6 +22,21 @@ const TextAlignedDiv = styled.div`
 
 export const TextAlignPlugin = options => {
 	return {
+		commands: {
+			setAlignment: (editor, alignment) => {
+				editor
+					.setBlocks({
+						type: ALIGNED_BLOCK,
+						data: { alignment },
+					})
+					.focus();
+			},
+		},
+		queries: {
+			getAlignment: editor => {
+				return editor.props.value.startBlock;
+			},
+		},
 		renderNode: (props, editor, next) => {
 			switch (props.node.type) {
 				case ALIGNED_BLOCK:

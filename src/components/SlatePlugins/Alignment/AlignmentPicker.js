@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
-	ALIGNED_BLOCK,
 	LEFT_ALIGN,
 	RIGHT_ALIGN,
 	CENTER_ALIGN,
 	JUSTIFY_ALIGN,
-} from './plugins/SlateTextAlignPlugin';
+} from './SlateTextAlignPlugin';
 const emperor = '#525252';
 
 const StyledSlateButton = styled.div`
@@ -80,17 +79,19 @@ export default class AlignmentPicker extends Component {
 			e.preventDefault();
 			e.stopPropagation();
 			const { editorRef } = this.props;
-			editorRef.current.setBlocks({
-				type: ALIGNED_BLOCK,
-				data: { alignment },
-			});
-			editorRef.current.focus();
+			editorRef.current.setAlignment(alignment);
 			this.handleClose();
 			// editorRef.current.toggleMark(slateMark).focus();
 		};
 	};
 
 	render() {
+		const { editorRef } = this.props;
+		console.log(
+			editorRef.current &&
+				editorRef.current.getAlignment &&
+				editorRef.current.getAlignment()
+		);
 		return (
 			<StyledSlateButton>
 				<OpenAlignmentButton onClick={this.handleClick}>

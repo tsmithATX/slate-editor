@@ -1,20 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import styled from 'styled-components';
-import SlateMarkButton from './SlatePlugins/SlateMarkButton';
 import JSONTree from 'react-json-tree';
-import BackgroundColorPicker from './SlatePlugins/BackgroundColorPicker';
-import AlignmentPicker from './SlatePlugins/AlignmentPicker';
-import { MarkHotkey } from './SlatePlugins/plugins/SlateMarkHotkey';
-import { TextAlignPlugin } from './SlatePlugins/plugins/SlateTextAlignPlugin';
-import { Editor } from 'slate-react';
+import BackgroundColorPicker from './SlatePlugins/BackgroundColor/BackgroundColorPicker';
+//alignment
+import AlignmentPicker from './SlatePlugins/Alignment/AlignmentPicker';
+import { TextAlignPlugin } from './SlatePlugins/Alignment/SlateTextAlignPlugin';
+//bold, underline, italics
+import SlateMarkButton from './SlatePlugins/SimpleDecorationMarks/SlateMarkButton';
+import { MarkHotkey } from './SlatePlugins/SimpleDecorationMarks/SlateMarkHotkey';
+//text color
+import TextColorPicker from './SlatePlugins/TextColor/TextColorPicker';
+import { TextColorPlugin } from './SlatePlugins/TextColor/TextColorPlugin';
 
 const plugins = [
 	MarkHotkey({ key: 'b', type: 'bold' }),
 	MarkHotkey({ key: 'i', type: 'italic' }),
 	MarkHotkey({ key: 'u', type: 'underline' }),
 	TextAlignPlugin(),
+	TextColorPlugin(),
 ];
 
 const SlateContainer = styled.div`
@@ -112,10 +118,7 @@ export default class SlateExperiment extends Component {
 
 	render() {
 		const { editMode, value, persistedState, backgroundColor } = this.state;
-		// <TextColorPicker
-		// 	value={selectionTextColor}
-		// 	updateColor={this.updateSelectionTextColor}
-		// />
+
 		return (
 			<ExperimentContainer>
 				<ButtonBar>
@@ -140,6 +143,10 @@ export default class SlateExperiment extends Component {
 							<BackgroundColorPicker
 								color={backgroundColor}
 								updateColor={this.updateBackroundColor}
+							/>
+							<TextColorPicker
+								color={'#525252'}
+								editorRef={this.editorRef}
 							/>
 							<button onClick={this.saveFromEdit}>Save</button>
 							<button onClick={this.cancelFromEdit}>
