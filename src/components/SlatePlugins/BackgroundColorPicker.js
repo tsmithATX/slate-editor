@@ -67,7 +67,7 @@ const colorStringToReactColor = colorString => {
 
 export default class BackgroundColorPicker extends Component {
 	static propTypes = {
-		color: PropTypes.object,
+		color: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
 		updateColor: PropTypes.func,
 	};
 

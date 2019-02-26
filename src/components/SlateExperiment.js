@@ -2,11 +2,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Value } from 'slate';
 import styled from 'styled-components';
-import SlateEditor from './SlateEditor';
 import SlateMarkButton from './SlatePlugins/SlateMarkButton';
 import JSONTree from 'react-json-tree';
 import BackgroundColorPicker from './SlatePlugins/BackgroundColorPicker';
 import AlignmentPicker from './SlatePlugins/AlignmentPicker';
+import { MarkHotkey } from './SlatePlugins/plugins/SlateMarkHotkey';
+import { TextAlignPlugin } from './SlatePlugins/plugins/SlateTextAlignPlugin';
+import { Editor } from 'slate-react';
+
+const plugins = [
+	MarkHotkey({ key: 'b', type: 'bold' }),
+	MarkHotkey({ key: 'i', type: 'italic' }),
+	MarkHotkey({ key: 'u', type: 'underline' }),
+	TextAlignPlugin(),
+];
 
 const SlateContainer = styled.div`
 	border: 1px solid #d2d2d2;
@@ -78,7 +87,6 @@ export default class SlateExperiment extends Component {
 	};
 
 	onChange = ({ value }) => {
-		console.log(value);
 		this.setState({ value });
 	};
 
@@ -144,10 +152,11 @@ export default class SlateExperiment extends Component {
 				</ButtonBar>
 				{editMode ? (
 					<SlateEditorContainer color={backgroundColor}>
-						<SlateEditor
-							bindEditorRef={this.editorRef}
+						<Editor
+							ref={this.editorRef}
+							plugins={plugins}
 							value={value}
-							updateValue={this.onChange}
+							onChange={this.onChange}
 						/>
 					</SlateEditorContainer>
 				) : (
@@ -155,7 +164,7 @@ export default class SlateExperiment extends Component {
 						color={backgroundColor}
 						onDoubleClick={this.startEditMode}
 					>
-						<SlateEditor value={value} />
+						<Editor plugins={plugins} value={value} />
 					</SlateContainer>
 				)}
 				<PersistedState>

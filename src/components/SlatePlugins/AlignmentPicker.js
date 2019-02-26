@@ -7,7 +7,7 @@ import {
 	RIGHT_ALIGN,
 	CENTER_ALIGN,
 	JUSTIFY_ALIGN,
-} from '../../utils/SlateTextAlignPlugin';
+} from './plugins/SlateTextAlignPlugin';
 const emperor = '#525252';
 
 const StyledSlateButton = styled.div`
@@ -84,6 +84,7 @@ export default class AlignmentPicker extends Component {
 				type: ALIGNED_BLOCK,
 				data: { alignment },
 			});
+			editorRef.current.focus();
 			this.handleClose();
 			// editorRef.current.toggleMark(slateMark).focus();
 		};
@@ -99,30 +100,21 @@ export default class AlignmentPicker extends Component {
 					<PickerPopover>
 						<BackgroundThing onClick={this.handleClose} />
 						<PopoverElements>
-							<AlignmentButton
-								onClick={this.handleAlignmentClick(LEFT_ALIGN)}
-							>
-								L
-							</AlignmentButton>
-							<AlignmentButton
-								onClick={this.handleAlignmentClick(RIGHT_ALIGN)}
-							>
-								R
-							</AlignmentButton>
-							<AlignmentButton
-								onClick={this.handleAlignmentClick(
-									CENTER_ALIGN
-								)}
-							>
-								C
-							</AlignmentButton>
-							<AlignmentButton
-								onClick={this.handleAlignmentClick(
-									JUSTIFY_ALIGN
-								)}
-							>
-								J
-							</AlignmentButton>
+							{[
+								{ alignment: LEFT_ALIGN, icon: 'L' },
+								{ alignment: CENTER_ALIGN, icon: 'C' },
+								{ alignment: RIGHT_ALIGN, icon: 'R' },
+								{ alignment: JUSTIFY_ALIGN, icon: 'J' },
+							].map(alignmentButton => (
+								<AlignmentButton
+									onClick={this.handleAlignmentClick(
+										alignmentButton.alignment
+									)}
+									key={alignmentButton.alignment}
+								>
+									{alignmentButton.icon}
+								</AlignmentButton>
+							))}
 						</PopoverElements>
 					</PickerPopover>
 				) : null}
