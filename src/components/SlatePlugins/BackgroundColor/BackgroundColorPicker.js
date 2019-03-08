@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { SketchPicker } from 'react-color';
 import styled from 'styled-components';
 import Color from 'color';
+import { pickerPresetColors } from '../../../constants/colors';
 
 const ColorPickerButtonWrapper = styled.div`
 	position: relative;
@@ -17,8 +18,8 @@ const PickerPopover = styled.div`
 
 const MainColorButton = styled.div`
 	border: 1px solid #525252;
-	width: 20px;
-	height: 20px;
+	width: 30px;
+	height: 30px;
 `;
 
 const ColorSquare = styled.div`
@@ -26,8 +27,8 @@ const ColorSquare = styled.div`
 		Color(color)
 			.rgb()
 			.string()};
-	width: 16px;
-	height: 16px;
+	width: 26px;
+	height: 26px;
 	margin: 2px;
 `;
 
@@ -103,6 +104,7 @@ export default class BackgroundColorPicker extends Component {
 						<SketchPicker
 							color={colorStringToReactColor(color)}
 							onChange={this.handleChange}
+							presetColors={pickerPresetColors}
 						/>
 					</PickerPopover>
 				) : null}
