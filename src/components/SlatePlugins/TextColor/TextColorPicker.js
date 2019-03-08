@@ -4,6 +4,7 @@ import { SketchPicker } from 'react-color';
 import styled from 'styled-components';
 import Color from 'color';
 import { COLOR_MARK } from './TextColorPlugin';
+import { pickerPresetColors } from '../../../constants/colors';
 
 const ColorPickerButtonWrapper = styled.div`
 	position: relative;
@@ -18,17 +19,25 @@ const PickerPopover = styled.div`
 
 const MainColorButton = styled.div`
 	border: 1px solid #525252;
-	width: 20px;
-	height: 20px;
+	width: 30px;
+	height: 30px;
+	position: relative;
 `;
 
 const ColorLetter = styled.div`
-	background-color: ${({ color }) =>
-		Color(color).isDark() ? 'transparent' : '#525252'};
-	color: ${({ color }) => color};
-	width: 16px;
-	height: 16px;
+	width: 26px;
+	height: 26px;
+	line-height: 20px;
 	margin: 2px;
+`;
+
+const MiniColorBar = styled.div`
+	position: absolute;
+	width: 24px;
+	height: 6px;
+	top: 20px;
+	left: 3px;
+	background-color: ${({ color }) => (color ? color : 'black')};
 `;
 
 const BackgroundThing = styled.div`
@@ -78,6 +87,8 @@ export default class TextColorPicker extends Component {
 
 	handleClose = () => {
 		this.setState({ displayColorPicker: false });
+		const { editorRef } = this.props;
+		editorRef.current.focus();
 	};
 
 	handleClick = () => {
@@ -89,24 +100,24 @@ export default class TextColorPicker extends Component {
 	handleChange = color => {
 		const { editorRef } = this.props;
 		const colorString = reactColorToColorString(color.rgb);
-		console.log(colorString);
-		console.log(COLOR_MARK);
-		console.log(editorRef.current);
+
 		editorRef.current
-			.focus()
-			.removeMark(COLOR_MARK)
+			.removeColorsAtSelection()
 			.addMark({
 				type: COLOR_MARK,
 				data: { fontColor: colorString },
-			});
+			})
+			.focus();
 	};
 
 	render() {
 		const { color } = this.props;
+
 		return (
 			<ColorPickerButtonWrapper>
 				<MainColorButton onClick={this.handleClick}>
 					<ColorLetter color={color}>A</ColorLetter>
+					<MiniColorBar color={color} />
 				</MainColorButton>
 				{this.state.displayColorPicker ? (
 					<PickerPopover>
@@ -114,6 +125,7 @@ export default class TextColorPicker extends Component {
 						<SketchPicker
 							color={colorStringToReactColor(color)}
 							onChange={this.handleChange}
+							presetColors={pickerPresetColors}
 						/>
 					</PickerPopover>
 				) : null}

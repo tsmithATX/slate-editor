@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 const emperor = '#525252';
 const StyledSlateButton = styled.div`
-	width: 20px;
-	height: 20px;
+	width: 30px;
+	height: 30px;
 	cursor: pointer;
 	border: 1px solid ${emperor};
-	line-height: 20px;
+	line-height: 30px;
 `;
 
 export default class SlateMarkButton extends Component {

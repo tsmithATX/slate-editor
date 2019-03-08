@@ -10,11 +10,11 @@ import {
 const emperor = '#525252';
 
 const StyledSlateButton = styled.div`
-	width: 20px;
-	height: 20px;
+	width: 30px;
+	height: 30px;
 	cursor: pointer;
 	border: 1px solid ${emperor};
-	line-height: 20px;
+	line-height: 30px;
 	position: relative;
 `;
 
@@ -25,8 +25,8 @@ const OpenAlignmentButton = styled.div`
 
 const PickerPopover = styled.div`
 	position: absolute;
-	top: 20px;
-	left: 0;
+	top: 30px;
+	left: -2px;
 	z-index: 100;
 	border: 1px solid black;
 `;
@@ -45,14 +45,19 @@ const PopoverElements = styled.div`
 	z-index: 100;
 	display: flex;
 	position: absolute;
-	top: 20;
+	top: 30;
 `;
 
 const AlignmentButton = styled.div`
-	width: 20px;
-	height: 20px;
+	width: 30px;
+	height: 30px;
 	z-index; 101;
 	border: 1px solid #525252;
+	background-color: white;
+`;
+
+const AlignmentIcon = styled.div`
+	font-weight: ${({ selected }) => (selected ? '900' : 'normal')};
 `;
 
 export default class AlignmentPicker extends Component {
@@ -66,35 +71,33 @@ export default class AlignmentPicker extends Component {
 		showAlignmentPicker: false,
 	};
 
-	handleClick = () => {
+	handleOpen = () => {
+		const { editorRef } = this.props;
 		this.setState({ showAlignmentPicker: true });
+		editorRef.current.focus();
 	};
 
 	handleClose = () => {
 		this.setState({ showAlignmentPicker: false });
 	};
 
-	handleAlignmentClick = alignment => {
-		return e => {
-			e.preventDefault();
-			e.stopPropagation();
-			const { editorRef } = this.props;
-			editorRef.current.setAlignment(alignment);
-			this.handleClose();
-			// editorRef.current.toggleMark(slateMark).focus();
-		};
+	handleAlignmentClick = alignment => e => {
+		e.preventDefault();
+		e.stopPropagation();
+		const { editorRef } = this.props;
+		editorRef.current.setAlignment(alignment);
+		this.handleClose();
 	};
 
 	render() {
 		const { editorRef } = this.props;
-		console.log(
+		const currentBlockAlignment =
 			editorRef.current &&
-				editorRef.current.getAlignment &&
-				editorRef.current.getAlignment()
-		);
+			editorRef.current.getAlignment &&
+			editorRef.current.getAlignment();
 		return (
 			<StyledSlateButton>
-				<OpenAlignmentButton onClick={this.handleClick}>
+				<OpenAlignmentButton onClick={this.handleOpen}>
 					-
 				</OpenAlignmentButton>
 				{this.state.showAlignmentPicker ? (
@@ -113,7 +116,14 @@ export default class AlignmentPicker extends Component {
 									)}
 									key={alignmentButton.alignment}
 								>
-									{alignmentButton.icon}
+									<AlignmentIcon
+										selected={
+											currentBlockAlignment ===
+											alignmentButton.alignment
+										}
+									>
+										{alignmentButton.icon}
+									</AlignmentIcon>
 								</AlignmentButton>
 							))}
 						</PopoverElements>

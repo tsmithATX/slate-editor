@@ -34,7 +34,11 @@ export const TextAlignPlugin = options => {
 		},
 		queries: {
 			getAlignment: editor => {
-				return editor.props.value.startBlock;
+				const startBlock = editor.props.value.startBlock;
+				if (startBlock) {
+					return startBlock.data.get('alignment', '');
+				}
+				return '';
 			},
 		},
 		renderNode: (props, editor, next) => {

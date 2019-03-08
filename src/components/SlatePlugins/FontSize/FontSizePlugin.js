@@ -2,39 +2,37 @@ import React from 'react';
 import styled from 'styled-components';
 import { Set } from 'immutable';
 
-export const COLOR_MARK = 'colored';
+export const FONT_SIZE_MARK = 'font_size';
 
-const ColoredText = styled.span`
-	color: ${({ mark: { data } }) => data.get('fontColor')};
+const SizedText = styled.span`
+	font-size: ${({ mark: { data } }) => data.get('fontSize', 14)}px;
 `;
 
-export const TextColorPlugin = () => {
+export const FontSizePlugin = () => {
 	return {
 		queries: {
-			getTextColors: editor => {
+			getFontSize: editor => {
 				const document = editor.props.value.document;
 				const selection = editor.props.value.selection;
 				if (selection) {
 					const marks = document.getMarksAtRange(selection);
 					return marks.filter(
-						mark => mark.get('type') === COLOR_MARK
+						mark => mark.get('type') === FONT_SIZE_MARK
 					);
 				}
 				return new Set();
 			},
 		},
 		commands: {
-			removeColorsAtSelection: editor => {
-				const marks = editor.getTextColors();
+			removeFontSizeAtSelection: editor => {
+				const marks = editor.getFontSize();
 				marks.map(mark => editor.removeMark(mark));
 			},
 		},
 		renderMark: (props, editor, next) => {
 			switch (props.mark.type) {
-				case COLOR_MARK:
-					return (
-						<ColoredText {...props}>{props.children}</ColoredText>
-					);
+				case FONT_SIZE_MARK:
+					return <SizedText {...props}>{props.children}</SizedText>;
 				default:
 					return next();
 			}
